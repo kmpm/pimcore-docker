@@ -4,7 +4,7 @@ set -Eeuo pipefail
 
 if ! [ -x "$(command -v j2)" ]; then
   echo 'Error: j2 is not installed.' >&2
-  echo 'Install using "pip install j2cli"' >&2
+  echo 'Install using "pip install j2cli[yaml]"' >&2
   exit 1
 fi
 
@@ -14,6 +14,7 @@ versions=( */ )
 versions=( "${versions[@]%/}" )
 
 travisEnv=
+echo "entries:" > build.yml
 for version in "${versions[@]}"; do
     if [[ "$version" == "files" || "$version" == "venv" ]]; then
     continue
@@ -60,6 +61,7 @@ for version in "${versions[@]}"; do
             fi
 
             dockerfiles+=( "$version/$variant/$debug/Dockerfile" )
+            echo "  - {version: '$version', variant: '$variant', debug: '$debug', path: '$version/$variant/$debug'}" >> build.yml
         done
     done
 
@@ -72,7 +74,11 @@ for version in "${versions[@]}"; do
         newTravisEnv+='\n  - VERSION='"$version VARIANT=$variant"
     done
     travisEnv="$newTravisEnv$travisEnv"
+    
+
 done
 
 travis="$(awk -v 'RS=\n\n' '$1 == "env:" { $0 = "env:'"$travisEnv"'" } { printf "%s%s", $0, RS }' .travis.yml)"
 echo "$travis" > .travis.yml
+
+#j2 files/templates/build.sh.j2 .travis.yml
