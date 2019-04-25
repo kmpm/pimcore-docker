@@ -1,3 +1,4 @@
+##<debug>##
 RUN apt-get update && apt-get install -y --no-install-recommends \
       autoconf automake libtool nasm make pkg-config libz-dev build-essential g++ iproute2 \
     && pecl install xdebug \
@@ -20,3 +21,4 @@ ENV PHP_IDE_CONFIG serverName=localhost
 COPY entrypoint.sh /usr/local/bin
 RUN chmod +x /usr/local/bin/entrypoint.sh
 ENTRYPOINT ["/usr/local/bin/entrypoint.sh"]
+##</debug>##
