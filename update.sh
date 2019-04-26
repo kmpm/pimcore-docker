@@ -13,8 +13,11 @@ me=`basename "$0"`
 versions=( */ )
 versions=( "${versions[@]%/}" )
 
+cp config.yml build.yml
+ 
+echo "entries:" >> build.yml
+
 travisEnv=
-echo "entries:" > build.yml
 for version in "${versions[@]}"; do
     if [[ "$version" == "files" || "$version" == "venv" ]]; then
     continue
@@ -81,4 +84,4 @@ done
 travis="$(awk -v 'RS=\n\n' '$1 == "env:" { $0 = "env:'"$travisEnv"'" } { printf "%s%s", $0, RS }' .travis.yml)"
 echo "$travis" > .travis.yml
 
-#j2 files/templates/build.sh.j2 .travis.yml
+j2 files/templates/build.sh.j2 build.yml > build.sh

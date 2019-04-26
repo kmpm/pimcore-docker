@@ -3,5 +3,5 @@
 
 
 {% for entry in entries %}
-echo "Building {{ entry.path }}"; (cd {{ entry.path }} && docker build -t 'php:{{ entry.version }}-{{ entry.variant }}-{{ entry.debug}}' .)
+echo "Building {{ entry.path }}"; (cd {{ entry.path }} && docker build -t '{{ docker.repository }}:PHP{{ entry.version }}-{{ entry.variant }}-{{ entry.debug}}' .)
 {% endfor %}

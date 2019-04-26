@@ -1,0 +1,4 @@
+docker:
+  repository: 'kmpm/pimcore'
+  maintainer: 'dominik@pfaffenbauer.at'
+
